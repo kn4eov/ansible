@@ -1,2 +1,5 @@
+[web_servers]
 pi3purple@192.168.11.11
+
+[db_server]
 pi3ltblue@192.168.11.12

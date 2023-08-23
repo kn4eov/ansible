@@ -4,13 +4,28 @@
   become: true
   tasks:
 
+  - name: install updates (CentOS)
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (Debian)
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Debian"
+
+- hosts: web_servers
+  become: true
+  tasks:
+
   - name: install apache and php packages for Debian
     apt:
       name:
         - apache2
         - libapache2-mod-php
       state: latest
-      update_cache: yes
     when: ansible_distribution == "Debian"
 
   - name: install apache and php packages for CentOS
@@ -19,5 +34,4 @@
         - httpd
         - php
       state: latest
-      update_cache: yes
     when: ansible_distribution == "CentOS"
