@@ -2,13 +2,7 @@
 
 - hosts: all
   become: true
-  tasks:
-
-  - name: install updates (CentOS)
-    dnf:
-      update_only: yes
-      update_cache: yes
-    when: ansible_distribution == "CentOS"
+  pre_tasks:
 
   - name: install updates (Debian)
     apt:
@@ -28,10 +22,22 @@
       state: latest
     when: ansible_distribution == "Debian"
 
-  - name: install apache and php packages for CentOS
-    dnf:
-      name:
-        - httpd
-        - php
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: install mariadb package (Debian)
+    apt:
+      name: mariadb-server
       state: latest
-    when: ansible_distribution == "CentOS"
+    when: ansible_distribution == "Debian"
+
+
+- hosts: file_servers
+  become: true
+  tasks:
+
+  - name: install samba package
+    package:
+      name: samba
+      state: latest
